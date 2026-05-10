@@ -68,8 +68,30 @@ The Threshold/
     └── index.css       # Global base styles
 ```
 
+## Data Collection (Google Sheets)
+
+Form submissions are sent to a Google Sheet via a Google Apps Script webhook.
+
+### Setup
+
+1. Create a new Google Sheet named **"Threshold Applications"**
+2. Add these headers in row 1:
+   `Timestamp | Name | Age | Location | Occupation | Relationship | Q1 | Q2 | Q3 | Q4 | Q5 | Q6 | Q7 | Q8 | Q9 | Q10 | Q11 | Q12 | Q13 | Q14 | Q15 | Commitment Scale | Commitment Why | Agreements`
+3. Open **Extensions → Apps Script**
+4. Replace the default code with the contents of `google-apps-script.gs` in this repo
+5. Click **Deploy → New deployment → Web app**
+   - Execute as: **Me**
+   - Who has access: **Anyone**
+6. Copy the Web App URL (looks like `https://script.google.com/macros/s/.../exec`)
+7. Paste it into `src/App.jsx` on line 220, replacing `YOUR_SCRIPT_ID`
+8. Rebuild and redeploy:
+   ```bash
+   npm run build && npx vercel --prod
+   ```
+
 ## Tech Stack
 
 - [Vite](https://vitejs.dev/)
 - [React](https://react.dev/)
 - Hosted on [Vercel](https://vercel.com/)
+- Data stored in [Google Sheets](https://sheets.google.com/)

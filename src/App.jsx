@@ -165,6 +165,8 @@ export default function ThresholdApplication() {
   const [submitted, setSubmitted] = useState(false);
   const [errors, setErrors] = useState({});
   const [fadeIn, setFadeIn] = useState(true);
+  const [submitting, setSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState(null);
   const containerRef = useRef(null);
 
   useEffect(() => {
@@ -207,11 +209,32 @@ export default function ThresholdApplication() {
     }
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!validateSection()) return;
-    setFormData((prev) => ({ ...prev, commitment_scale: rangeValue }));
-    setSubmitted(true);
-    console.log("FORM DATA:", { ...formData, commitment_scale: rangeValue });
+    const payload = { ...formData, commitment_scale: rangeValue };
+    setSubmitting(true);
+    setSubmitError(null);
+
+    try {
+      // Replace this URL with your actual Google Apps Script Web App URL after deployment
+      const GAS_URL = "https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec";
+      const res = await fetch(GAS_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      const json = await res.json();
+      if (json.result === "success") {
+        setSubmitted(true);
+      } else {
+        throw new Error(json.message || "Submission failed");
+      }
+    } catch (err) {
+      setSubmitError("Something went wrong. Please try again or contact support.");
+      console.error("Submit error:", err);
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   const section = SECTIONS[currentSection];
@@ -607,6 +630,12 @@ export default function ThresholdApplication() {
           </div>
         ))}
 
+        {submitError && (
+          <p style={{ ...styles.errorText, textAlign: "center", marginTop: 24 }}>
+            {submitError}
+          </p>
+        )}
+
         <div style={styles.buttonRow}>
           {currentSection > 0 && (
             <button style={styles.btnSecondary} onClick={prev}>
@@ -622,13 +651,15 @@ export default function ThresholdApplication() {
             <button
               style={{
                 ...styles.btnPrimary,
-                background: "#c9a96e",
-                color: "#0a0a0a",
+                background: submitting ? "#3a352e" : "#c9a96e",
+                color: submitting ? "#6b6459" : "#0a0a0a",
                 fontWeight: 700,
+                cursor: submitting ? "not-allowed" : "pointer",
               }}
               onClick={handleSubmit}
+              disabled={submitting}
             >
-              Submit Application
+              {submitting ? "Submitting..." : "Submit Application"}
             </button>
           )}
         </div>
