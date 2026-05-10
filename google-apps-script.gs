@@ -3,12 +3,15 @@
  * 
  * Setup instructions:
  * 1. Open Google Sheets → create a new spreadsheet named "Threshold Applications"
- * 2. Add headers in row 1: Timestamp | Name | Age | Location | Occupation | Relationship | Q1 | Q2 | Q3 | Q4 | Q5 | Q6 | Q7 | Q8 | Q9 | Q10 | Q11 | Q12 | Q13 | Q14 | Q15 | Commitment Scale | Commitment Why | Agreements
- * 3. Extensions → Apps Script
- * 4. Replace the default code with the entire contents of this file
- * 5. Save as "Code.gs", click Deploy → New deployment → Web app
- * 6. Execute as: Me | Who has access: Anyone (or Anyone with Google account)
- * 7. Copy the Web App URL and give it to me so I can wire it into the form
+ * 2. In the first sheet (rename it to "Applications"), add headers in row 1:
+ *    Timestamp | Name | Email | Age | Location | Occupation | Relationship | Q1 | Q2 | Q3 | Q4 | Q5 | Q6 | Q7 | Q8 | Q9 | Q10 | Q11 | Q12 | Q13 | Q14 | Q15 | Commitment Scale | Commitment Why | Agreements
+ * 3. Create a second sheet named "Emails" — headers: Timestamp | Name | Email
+ *    (Or let the script auto-create it on first submission)
+ * 4. Extensions → Apps Script
+ * 5. Replace the default code with the entire contents of this file
+ * 6. Save as "Code.gs", click Deploy → New deployment → Web app
+ * 7. Execute as: Me | Who has access: Anyone (or Anyone with Google account)
+ * 8. Copy the Web App URL and give it to me so I can wire it into the form
  */
 
 function doPost(e) {
@@ -17,11 +20,14 @@ function doPost(e) {
 
   try {
     var data = JSON.parse(e.postData.contents);
-    var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+    var ss = SpreadsheetApp.getActiveSpreadsheet();
     
-    var row = [
+    // ---- Applications sheet ----
+    var appSheet = ss.getSheetByName("Applications") || ss.getSheets()[0];
+    var appRow = [
       new Date(),               // Timestamp
       data.name || "",
+      data.email || "",
       data.age || "",
       data.location || "",
       data.occupation || "",
@@ -45,8 +51,16 @@ function doPost(e) {
       data.commitment_why || "",
       data.agreements || ""
     ];
+    appSheet.appendRow(appRow);
 
-    sheet.appendRow(row);
+    // ---- Emails sheet ----
+    var emailSheet = ss.getSheetByName("Emails");
+    if (!emailSheet) {
+      emailSheet = ss.insertSheet("Emails");
+      emailSheet.appendRow(["Timestamp", "Name", "Email"]);
+    }
+    var emailRow = [new Date(), data.name || "", data.email || ""];
+    emailSheet.appendRow(emailRow);
 
     return ContentService.createTextOutput(JSON.stringify({ result: "success" }))
       .setMimeType(ContentService.MimeType.JSON)

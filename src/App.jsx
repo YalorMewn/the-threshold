@@ -6,6 +6,7 @@ const SECTIONS = [
     subtitle: "Start here.",
     fields: [
       { id: "name", label: "Full Name", type: "text", required: true },
+      { id: "email", label: "Email Address", type: "text", required: true },
       { id: "age", label: "Age", type: "number", required: true },
       { id: "location", label: "Location (City, State/Country)", type: "text", required: true },
       { id: "occupation", label: "Occupation", type: "text", required: true },
@@ -559,13 +560,23 @@ export default function ThresholdApplication() {
           <div key={field.id} style={styles.fieldGroup}>
             <label style={styles.label}>{field.label}</label>
 
-            {field.type === "text" && (
+            {field.type === "text" && field.id !== "email" && (
               <input
                 type="text"
                 style={styles.input(errors[field.id])}
                 value={formData[field.id] || ""}
                 onChange={(e) => handleChange(field.id, e.target.value)}
                 placeholder="Your answer"
+              />
+            )}
+
+            {field.id === "email" && (
+              <input
+                type="email"
+                style={styles.input(errors[field.id])}
+                value={formData[field.id] || ""}
+                onChange={(e) => handleChange(field.id, e.target.value)}
+                placeholder="you@example.com"
               />
             )}
 

@@ -75,14 +75,15 @@ Form submissions are sent to a Google Sheet via a Google Apps Script webhook. Th
 ### Spreadsheet Setup (one-time)
 
 1. Create a new Google Sheet named **"Threshold Applications"**
-2. Add these headers in row 1:
-   `Timestamp | Name | Age | Location | Occupation | Relationship | Q1 | Q2 | Q3 | Q4 | Q5 | Q6 | Q7 | Q8 | Q9 | Q10 | Q11 | Q12 | Q13 | Q14 | Q15 | Commitment Scale | Commitment Why | Agreements`
-3. Open **Extensions → Apps Script**
-4. Replace the default code with the contents of `google-apps-script.gs` in this repo
-5. Click **Deploy → New deployment → Web app**
+2. In the first sheet (rename it to **"Applications"**), add these headers in row 1:
+   `Timestamp | Name | Email | Age | Location | Occupation | Relationship | Q1 | Q2 | Q3 | Q4 | Q5 | Q6 | Q7 | Q8 | Q9 | Q10 | Q11 | Q12 | Q13 | Q14 | Q15 | Commitment Scale | Commitment Why | Agreements`
+3. The script will auto-create a second sheet named **"Emails"** with headers `Timestamp | Name | Email`
+4. Open **Extensions → Apps Script**
+5. Replace the default code with the contents of `google-apps-script.gs` in this repo
+6. Click **Deploy → New deployment → Web app**
    - Execute as: **Me**
    - Who has access: **Anyone**
-6. Every submission will appear as a new row in your Sheet
+7. Every submission appears as a new row in the **Applications** sheet, and a duplicate entry lands in the **Emails** sheet
 
 ## Tech Stack
 
