@@ -70,9 +70,9 @@ The Threshold/
 
 ## Data Collection (Google Sheets)
 
-Form submissions are sent to a Google Sheet via a Google Apps Script webhook.
+Form submissions are sent to a Google Sheet via a Google Apps Script webhook. The webhook URL is already configured in `src/App.jsx`.
 
-### Setup
+### Spreadsheet Setup (one-time)
 
 1. Create a new Google Sheet named **"Threshold Applications"**
 2. Add these headers in row 1:
@@ -82,12 +82,7 @@ Form submissions are sent to a Google Sheet via a Google Apps Script webhook.
 5. Click **Deploy → New deployment → Web app**
    - Execute as: **Me**
    - Who has access: **Anyone**
-6. Copy the Web App URL (looks like `https://script.google.com/macros/s/.../exec`)
-7. Paste it into `src/App.jsx` on line 220, replacing `YOUR_SCRIPT_ID`
-8. Rebuild and redeploy:
-   ```bash
-   npm run build && npx vercel --prod
-   ```
+6. Every submission will appear as a new row in your Sheet
 
 ## Tech Stack
 

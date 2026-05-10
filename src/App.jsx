@@ -217,7 +217,7 @@ export default function ThresholdApplication() {
 
     try {
       // Replace this URL with your actual Google Apps Script Web App URL after deployment
-      const GAS_URL = "https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec";
+      const GAS_URL = "https://script.google.com/macros/s/AKfycbyErr9KClHTRw7o0vuNLvQEtjY2J1DFd6Ojjscs6tZyAUaARN2PvlP-vnDD3OyLha0I/exec";
       const res = await fetch(GAS_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
