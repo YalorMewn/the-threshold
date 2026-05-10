@@ -217,18 +217,17 @@ export default function ThresholdApplication() {
     setSubmitError(null);
 
     try {
-      // Replace this URL with your actual Google Apps Script Web App URL after deployment
-      const GAS_URL = "https://script.google.com/macros/s/AKfycbztXr2T9f27EnhozijwmAiA5AwFH-c_udr-5powcyM3_q01zAL6-le9igC0_-YcbdXn/exec";
-      const res = await fetch(GAS_URL, {
+      // Replace this with your Formspree form endpoint
+      const FORMSPREE_URL = "https://formspree.io/f/mgodpjwr";
+      const res = await fetch(FORMSPREE_URL, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Accept": "application/json", "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       });
-      const json = await res.json();
-      if (json.result === "success") {
+      if (res.ok) {
         setSubmitted(true);
       } else {
-        throw new Error(json.message || "Submission failed");
+        throw new Error("Submission failed");
       }
     } catch (err) {
       setSubmitError("Something went wrong. Please try again or contact support.");

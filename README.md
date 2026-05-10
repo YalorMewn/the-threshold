@@ -68,22 +68,27 @@ The Threshold/
     └── index.css       # Global base styles
 ```
 
-## Data Collection (Google Sheets)
+## Data Collection (Email Forwarding via Formspree)
 
-Form submissions are sent to a Google Sheet via a Google Apps Script webhook. The webhook URL is already configured in `src/App.jsx`.
+Form submissions are sent directly to your email inbox via [Formspree](https://formspree.io). No spreadsheet setup required.
 
-### Spreadsheet Setup (one-time)
+### Setup (5 minutes)
 
-1. Create a new Google Sheet named **"Threshold Applications"**
-2. In the first sheet (rename it to **"Applications"**), add these headers in row 1:
-   `Timestamp | Name | Email | Age | Location | Occupation | Relationship | Q1 | Q2 | Q3 | Q4 | Q5 | Q6 | Q7 | Q8 | Q9 | Q10 | Q11 | Q12 | Q13 | Q14 | Q15 | Commitment Scale | Commitment Why | Agreements`
-3. The script will auto-create a second sheet named **"Emails"** with headers `Timestamp | Name | Email`
-4. Open **Extensions → Apps Script**
-5. Replace the default code with the contents of `google-apps-script.gs` in this repo
-6. Click **Deploy → New deployment → Web app**
-   - Execute as: **Me**
-   - Who has access: **Anyone**
-7. Every submission appears as a new row in the **Applications** sheet, and a duplicate entry lands in the **Emails** sheet
+1. Go to [formspree.io](https://formspree.io) and create a free account
+2. Create a new form — you'll get an endpoint like `https://formspree.io/f/xrgjprnd`
+3. Paste that URL into `src/App.jsx` on line 220, replacing `YOUR_FORM_ID`
+4. Rebuild and redeploy:
+   ```bash
+   npm run build && npx vercel --prod
+   ```
+5. Every submission arrives in your email inbox, plus you can view/export submissions from the Formspree dashboard
+
+### Features
+
+- Free tier: 50 submissions/month
+- Built-in spam protection
+- CSV export of all submissions
+- Optional: connect your own email (Gmail, custom domain, etc.)
 
 ## Tech Stack
 
